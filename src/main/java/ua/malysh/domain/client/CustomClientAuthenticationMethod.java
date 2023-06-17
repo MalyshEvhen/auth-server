@@ -7,8 +7,10 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 @Embeddable
 @NoArgsConstructor
 public class CustomClientAuthenticationMethod {
+
     public static final CustomClientAuthenticationMethod CLIENT_SECRET_BASIC =
             new CustomClientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC);
+
     public CustomClientAuthenticationMethod(ClientAuthenticationMethod authenticationMethod) {
         this.value = authenticationMethod.getValue();
     }

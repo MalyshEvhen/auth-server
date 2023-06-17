@@ -71,19 +71,6 @@ public class Client {
     @Column(name = "client_token_settings")
     private ClientTokenSettings clientTokenSettings;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Client client = (Client) o;
-        return getId() != null && Objects.equals(getId(), client.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
-
     public RegisteredClient toRegisteredClient() {
         return RegisteredClient
                 .withId(String.valueOf(this.id))
@@ -117,5 +104,18 @@ public class Client {
                 methods.add(clientAuthenticationMethod);
             }
         };
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Client client = (Client) o;
+        return getId() != null && Objects.equals(getId(), client.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

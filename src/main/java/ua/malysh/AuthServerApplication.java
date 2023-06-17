@@ -1,20 +1,20 @@
 package ua.malysh;
 
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
+import java.util.Set;
+import java.util.UUID;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import ua.malysh.domain.client.Client;
 import ua.malysh.domain.client.ClientTokenSettings;
 import ua.malysh.domain.client.CustomClientAuthenticationMethod;
 import ua.malysh.domain.client.GrantType;
-import ua.malysh.domain.user.Role;
 import ua.malysh.domain.user.User;
 import ua.malysh.repository.ClientRepository;
 import ua.malysh.repository.UserRepository;
-
-import java.util.Set;
-import java.util.UUID;
 
 @SpringBootApplication
 @RequiredArgsConstructor
@@ -46,7 +46,7 @@ public class AuthServerApplication {
         user.setEmail("email@gmail.com");
         user.setUsername("foo");
         user.setPassword("bar");
-        user.setRoles(Set.of(Role.ADMIN, Role.USER));
+        user.setRoles(Set.of("ADMIN", "USER"));
 
         userRepository.save(user);
     }

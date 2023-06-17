@@ -50,13 +50,12 @@ public class User implements UserDetails {
     @CollectionTable(name = "roles",
             joinColumns = @JoinColumn(name = "id"))
     @Column(name = "roles")
-    private Set<Role> roles = new HashSet<>();
+    private Set<String> roles = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles()
                 .stream()
-                .map(Role::getValue)
                 .map(SimpleGrantedAuthority::new)
                 .toList();
     }

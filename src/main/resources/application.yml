@@ -19,10 +19,10 @@ spring:
     password: ${DATASOURCE_PASSWORD:password}
 
   jpa:
-    generate-ddl: false
+    generate-ddl: true
 
   flyway:
-    enabled: true
+    enabled: false
     baseline-on-migrate: true
 logging:
   level:
