@@ -6,7 +6,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
@@ -17,23 +16,22 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
     @Order(1)
     public SecurityFilterChain asFilterChain(HttpSecurity http) throws Exception {
-        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 
+        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(Customizer.withDefaults());
 
         http.exceptionHandling(
                 c -> c.defaultAuthenticationEntryPointFor(
                         new LoginUrlAuthenticationEntryPoint("/login"),
-                        new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                )
-        );
+                        new MediaTypeRequestMatcher(MediaType.TEXT_HTML)))
+                .oauth2ResourceServer(resourceServer -> resourceServer
+                        .jwt(Customizer.withDefaults()));
 
         return http.build();
     }
@@ -41,9 +39,9 @@ public class SecurityConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain appFilterChain(HttpSecurity http) throws Exception {
-        http.formLogin(Customizer.withDefaults());
 
-        http.authorizeHttpRequests(c -> c.anyRequest().authenticated());
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
+        http.formLogin(Customizer.withDefaults());
 
         return http.build();
     }
@@ -57,6 +55,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
-
-
 }
