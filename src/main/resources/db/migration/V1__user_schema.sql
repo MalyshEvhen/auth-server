@@ -4,7 +4,9 @@ CREATE TABLE users (
     email TEXT NOT NULL,
     uuid UUID NOT NULL,
     password TEXT NOT NULL,
-    username TEXT NOT NULL
+    username TEXT NOT NULL,
+    updated_at TIMESTAMP,
+    created_at TIMESTAMP,
 );
 ALTER TABLE users
 ADD CONSTRAINT users_pkey PRIMARY KEY (id);
