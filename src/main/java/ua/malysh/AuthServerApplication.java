@@ -20,17 +20,17 @@ public class AuthServerApplication {
         SpringApplication.run(AuthServerApplication.class, args);
     }
 
-    @PostConstruct
-    public void init() {
+    // @PostConstruct
+    // public void init() {
 
-        var user = new User();
-        user.setIdentifier(UUID.randomUUID());
-        user.setEmail("email@gmail.com");
-        user.setUsername("user");
-        user.setPassword("password");
-        user.setRoles(Set.of("read"));
+    //     var user = new User();
+    //     user.setIdentifier(UUID.randomUUID());
+    //     user.setEmail("email@gmail.com");
+    //     user.setUsername("user");
+    //     user.setPassword("password");
+    //     user.setRoles(Set.of("read"));
 
-        userRepository.save(user);
-    }
+    //     userRepository.save(user);
+    // }
 
 }
