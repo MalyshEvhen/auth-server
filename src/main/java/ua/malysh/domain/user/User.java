@@ -1,11 +1,14 @@
 package ua.malysh.domain.user;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -49,6 +52,12 @@ public class User {
     @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "roles")
     private Set<String> roles = new HashSet<>();
+
+    @CreationTimestamp
+    private LocalDate createdAt;
+
+    @UpdateTimestamp
+    private LocalDate updatedAt;
 
     @Override
     public boolean equals(Object o) {
