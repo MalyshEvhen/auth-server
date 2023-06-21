@@ -1,17 +1,17 @@
 version: '3'
 
 services:
-  postgres:
+  users-db:
     image: postgres:15
     ports:
       - '5432:5432'
     environment:
       POSTGRES_DB: users_db
-      POSTGRES_USER: ${PRODUCTS_DATASOURCE_USERNAME:-postgres}
-      POSTGRES_PASSWORD: ${PRODUCTS_DATASOURCE_PASSWORD:-password}
+      POSTGRES_USER: ${USERS_DATASOURCE_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${USERS_DATASOURCE_PASSWORD:-password}
     volumes:
-      - products-data:/var/lib/postgresql/data
+      - users-data:/var/lib/postgresql/data
     restart: on-failure
 
 volumes:
-  products-data:
+  users-data:
