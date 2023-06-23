@@ -1,6 +1,5 @@
 package ua.malysh;
 
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.boot.SpringApplication;
@@ -10,6 +9,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import ua.malysh.domain.user.User;
 import ua.malysh.repository.UserRepository;
+import ua.malysh.util.constants.Roles;
+import ua.malysh.util.constants.Permissions;
 
 @SpringBootApplication
 @RequiredArgsConstructor
@@ -20,17 +21,17 @@ public class AuthServerApplication {
         SpringApplication.run(AuthServerApplication.class, args);
     }
 
-    // @PostConstruct
-    // public void init() {
+     @PostConstruct
+     public void init() {
 
-    //     var user = new User();
-    //     user.setIdentifier(UUID.randomUUID());
-    //     user.setEmail("email@gmail.com");
-    //     user.setUsername("user");
-    //     user.setPassword("password");
-    //     user.setRoles(Set.of("read"));
+         var user = new User();
+         user.setIdentifier(UUID.randomUUID());
+         user.setEmail("email@gmail.com");
+         user.setUsername("user");
+         user.setPassword("password");
+         user.addAuthorities(Roles.USER, Permissions.READ, Permissions.WRITE);
 
-    //     userRepository.save(user);
-    // }
+         userRepository.save(user);
+     }
 
 }

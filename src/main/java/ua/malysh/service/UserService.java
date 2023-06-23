@@ -1,6 +1,7 @@
 package ua.malysh.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +15,7 @@ import ua.malysh.service.exceptions.EmailAlreadyExistsException;
 import ua.malysh.service.exceptions.UserNotFoundException;
 import ua.malysh.service.exceptions.UsernameAlreadyExistsException;
 import ua.malysh.util.constants.Roles;
-import ua.malysh.util.constants.Scopes;
+import ua.malysh.util.constants.Permissions;
 
 import java.util.function.Supplier;
 
@@ -42,18 +43,19 @@ public class UserService implements UserDetailsService {
         checkUniqueFields(userRegistrationForm);
 
         var user = UserMapper.toUser(userRegistrationForm);
-        user.addRoles(Roles.USER, Scopes.READ, Scopes.WRITE);
+        user.addAuthorities(Roles.USER, Permissions.READ, Permissions.WRITE);
 
         var savedUser = repository.save(user);
         return savedUser.getId();
     }
 
+    @PreAuthorize("hasAuthority('permission:write') && hasRole('ADMIN')")
     @Transactional
     public Long saveAdminUser(UserRegistrationForm userRegistrationForm) {
         checkUniqueFields(userRegistrationForm);
 
         var user = UserMapper.toUser(userRegistrationForm);
-        user.addRoles(Roles.ADMIN, Scopes.READ, Scopes.WRITE);
+        user.addAuthorities(Roles.ADMIN, Permissions.READ, Permissions.WRITE);
 
         var savedUser = repository.save(user);
         return savedUser.getId();

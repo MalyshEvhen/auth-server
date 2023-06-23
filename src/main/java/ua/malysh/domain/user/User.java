@@ -3,27 +3,26 @@ package ua.malysh.domain.user;
 import java.time.LocalDate;
 import java.util.*;
 
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = {
+        @Index(name = "idx_user_username", columnList = "username"),
+        @Index(name = "idx_user_email", columnList = "email"),
+        @Index(name = "idx_user_uuid", columnList = "uuid")
+}, uniqueConstraints = {
+        @UniqueConstraint(name = "uc_user_uuid", columnNames = {"uuid"}),
+        @UniqueConstraint(name = "uc_user_username", columnNames = {"username"}),
+        @UniqueConstraint(name = "uc_user_email", columnNames = {"email"})
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -48,9 +47,9 @@ public class User {
 
     @Setter(AccessLevel.PRIVATE)
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "roles")
-    private Set<String> roles = new HashSet<>();
+    @CollectionTable(name = "authorities", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "authority")
+    private Set<String> authorities = new HashSet<>();
 
     @CreationTimestamp
     private LocalDate createdAt;
@@ -58,8 +57,8 @@ public class User {
     @UpdateTimestamp
     private LocalDate updatedAt;
 
-    public void addRoles(String... roles) {
-        this.roles.addAll(Arrays.asList(roles));
+    public void addAuthorities(String... roles) {
+        this.authorities.addAll(Arrays.asList(roles));
     }
 
     @Override

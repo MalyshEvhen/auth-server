@@ -11,4 +11,4 @@ CREATE TABLE users (
 ALTER TABLE users
 ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 -- user roles
-CREATE TABLE roles (id BIGINT NOT NULL, value TEXT);
+CREATE TABLE authorities (id BIGINT NOT NULL, authority TEXT);

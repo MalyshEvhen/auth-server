@@ -16,7 +16,7 @@ public class SecuredUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getRoles()
+        return user.getAuthorities()
                 .stream()
                 .map(SimpleGrantedAuthority::new)
                 .toList();
