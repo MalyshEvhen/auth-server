@@ -6,7 +6,7 @@ CREATE TABLE users (
     password TEXT NOT NULL,
     username TEXT NOT NULL,
     updated_at TIMESTAMP,
-    created_at TIMESTAMP,
+    created_at TIMESTAMP
 );
 ALTER TABLE users
 ADD CONSTRAINT users_pkey PRIMARY KEY (id);

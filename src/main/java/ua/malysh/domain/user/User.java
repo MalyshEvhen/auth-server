@@ -1,11 +1,9 @@
 package ua.malysh.domain.user;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
+import lombok.AccessLevel;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -48,6 +46,7 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Setter(AccessLevel.PRIVATE)
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "roles")
@@ -58,6 +57,10 @@ public class User {
 
     @UpdateTimestamp
     private LocalDate updatedAt;
+
+    public void addRoles(String... roles) {
+        this.roles.addAll(Arrays.asList(roles));
+    }
 
     @Override
     public boolean equals(Object o) {

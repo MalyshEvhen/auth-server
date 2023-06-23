@@ -5,17 +5,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+import ua.malysh.dto.UserRegistrationForm;
+import ua.malysh.mapper.UserMapper;
 import ua.malysh.model.SecuredUser;
 import ua.malysh.repository.UserRepository;
+import ua.malysh.service.exceptions.EmailAlreadyExistsException;
 import ua.malysh.service.exceptions.UserNotFoundException;
+import ua.malysh.service.exceptions.UsernameAlreadyExistsException;
+import ua.malysh.util.constants.Roles;
+import ua.malysh.util.constants.Scopes;
 
 import java.util.function.Supplier;
+
+import static ua.malysh.util.constants.ErrorMessages.*;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
-    public static final String USER_NOT_FOUND_MESSAGE = "User '%s' not found";
 
     private final UserRepository repository;
 
@@ -23,10 +30,47 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findByUsername(username)
                 .map(SecuredUser::new)
-                .orElseThrow(userNotFoundExceptionSupplier(username));
+                .orElseThrow(userNotFoundExceptionSupplier());
     }
 
-    private static Supplier<UserNotFoundException> userNotFoundExceptionSupplier(String username) {
-        return () -> new UserNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, username));
+    private static Supplier<UserNotFoundException> userNotFoundExceptionSupplier() {
+        return () -> new UserNotFoundException(USER_NOT_FOUND);
+    }
+
+    @Transactional
+    public Long saveUser(UserRegistrationForm userRegistrationForm) {
+        checkUniqueFields(userRegistrationForm);
+
+        var user = UserMapper.toUser(userRegistrationForm);
+        user.addRoles(Roles.USER, Scopes.READ, Scopes.WRITE);
+
+        var savedUser = repository.save(user);
+        return savedUser.getId();
+    }
+
+    @Transactional
+    public Long saveAdminUser(UserRegistrationForm userRegistrationForm) {
+        checkUniqueFields(userRegistrationForm);
+
+        var user = UserMapper.toUser(userRegistrationForm);
+        user.addRoles(Roles.ADMIN, Scopes.READ, Scopes.WRITE);
+
+        var savedUser = repository.save(user);
+        return savedUser.getId();
+    }
+
+    private void checkUniqueFields(UserRegistrationForm userRegistrationForm) {
+        if (isEmailExists(userRegistrationForm.email()))
+            throw new EmailAlreadyExistsException(EMAIL_ALREADY_EXISTS);
+        if (isUsernameExists(userRegistrationForm.username()))
+            throw new UsernameAlreadyExistsException(USERNAME_ALREADY_EXISTS);
+    }
+
+    private boolean isEmailExists(String email) {
+        return repository.existsByEmail(email);
+    }
+
+    private boolean isUsernameExists(String username) {
+        return repository.existsByUsername(username);
     }
 }
