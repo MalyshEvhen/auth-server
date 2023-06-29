@@ -11,7 +11,7 @@ import ua.malysh.dto.UserRegistrationForm;
 import ua.malysh.service.UserService;
 
 @RestController
-@RequestMapping("/api/v1/registration")
+@RequestMapping("/api/v1/register")
 @RequiredArgsConstructor
 public class RegistrationController {
     private final UserService userService;

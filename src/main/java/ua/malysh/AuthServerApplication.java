@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import ua.malysh.domain.user.User;
 import ua.malysh.repository.UserRepository;
 import ua.malysh.util.constants.Roles;
-import ua.malysh.util.constants.Permissions;
 
 @SpringBootApplication
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class AuthServerApplication {
          user.setEmail("email@gmail.com");
          user.setUsername("user");
          user.setPassword("password");
-         user.addAuthorities(Roles.USER, Permissions.READ, Permissions.WRITE);
+         user.addAuthorities(Roles.ADMIN);
 
          userRepository.save(user);
      }

@@ -15,7 +15,6 @@ import ua.malysh.service.exceptions.EmailAlreadyExistsException;
 import ua.malysh.service.exceptions.UserNotFoundException;
 import ua.malysh.service.exceptions.UsernameAlreadyExistsException;
 import ua.malysh.util.constants.Roles;
-import ua.malysh.util.constants.Permissions;
 
 import java.util.function.Supplier;
 
@@ -43,7 +42,7 @@ public class UserService implements UserDetailsService {
         checkUniqueFields(userRegistrationForm);
 
         var user = UserMapper.toUser(userRegistrationForm);
-        user.addAuthorities(Roles.USER, Permissions.READ, Permissions.WRITE);
+        user.addAuthorities(Roles.USER);
 
         var savedUser = repository.save(user);
         return savedUser.getId();
@@ -55,7 +54,7 @@ public class UserService implements UserDetailsService {
         checkUniqueFields(userRegistrationForm);
 
         var user = UserMapper.toUser(userRegistrationForm);
-        user.addAuthorities(Roles.ADMIN, Permissions.READ, Permissions.WRITE);
+        user.addAuthorities(Roles.ADMIN);
 
         var savedUser = repository.save(user);
         return savedUser.getId();
