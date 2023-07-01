@@ -1,7 +1,6 @@
 package ua.malysh.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,13 +47,12 @@ public class UserService implements UserDetailsService {
         return savedUser.getId();
     }
 
-    @PreAuthorize("hasAuthority('permission:write') && hasRole('ADMIN')")
     @Transactional
     public Long saveAdminUser(UserRegistrationForm userRegistrationForm) {
         checkUniqueFields(userRegistrationForm);
 
         var user = UserMapper.toUser(userRegistrationForm);
-        user.addAuthorities(Roles.ADMIN);
+        user.addAuthorities(Roles.USER, Roles.ADMIN);
 
         var savedUser = repository.save(user);
         return savedUser.getId();

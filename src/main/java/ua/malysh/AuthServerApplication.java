@@ -28,7 +28,7 @@ public class AuthServerApplication {
          user.setEmail("email@gmail.com");
          user.setUsername("user");
          user.setPassword("password");
-         user.addAuthorities(Roles.ADMIN);
+         user.addAuthorities(Roles.ADMIN, Roles.USER);
 
          userRepository.save(user);
      }
